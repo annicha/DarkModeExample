@@ -8,6 +8,46 @@
 
 import UIKit
 
+struct UserDefaultKeys {
+	static let useCustomTheme = "useCustomTheme"
+	static let isDarkSelected = "isDarkSelected"
+}
+
+class DefaultThemeManager {
+	static func checkDefaultTheme(){
+		let isDarkSelected = UserDefaults.standard.bool(forKey: UserDefaultKeys.isDarkSelected)
+
+		if #available(iOS 13, *){
+			let useCustomTheme = UserDefaults.standard.bool(forKey: UserDefaultKeys.useCustomTheme)
+			
+			ThemeManager.useSystemTheme = !useCustomTheme
+			
+			if useCustomTheme {
+				ThemeManager.isDarkModeEnabled = isDarkSelected
+			}
+		} else {
+			ThemeManager.isDarkModeEnabled = isDarkSelected
+		}
+	}
+	
+
+	static func choseSystemTheme(_ useSystemTheme: Bool){
+		if #available(iOS 13, *) {
+			ThemeManager.useSystemTheme = useSystemTheme
+			UserDefaults.standard.set(!useSystemTheme, forKey: UserDefaultKeys.useCustomTheme)
+			
+			choseDarkTheme(false)
+			return
+		}
+		print("\n🧪 iOS <13 shouldn't be using this function. \(#function) \(#file)")
+	}
+	
+	static func choseDarkTheme(_ isDarkSelected: Bool){
+		ThemeManager.isDarkModeEnabled = isDarkSelected
+		UserDefaults.standard.set(isDarkSelected, forKey: UserDefaultKeys.isDarkSelected)
+	}
+}
+
 @propertyWrapper
 struct Theme {
     let light: UIColor

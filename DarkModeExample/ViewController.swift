@@ -20,15 +20,9 @@ class ViewController: UIViewController {
 	// MARK: - Life Cycles
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Do any additional setup after loading the view.
-		if #available(iOS 13, *) {
-			systemThemeSettingStackView.isHidden = false
-			themeButton.isHidden = true
-		} else {
-			themeButton.isHidden = false
-			systemThemeSettingStackView.isHidden = true
-		}
-
+		setSystemThemeStack()
+		configureSystemThemeButton()
+		
 		// Theme
 		addThemeChangeObserver()
 		configureSubviewsColors()
@@ -41,15 +35,38 @@ class ViewController: UIViewController {
 	}
 	
 	@IBAction func useSystemThemeToggleValueChanged(_ sender: Any) {
-		ThemeManager.useSystemTheme = !ThemeManager.useSystemTheme
+		
+		// toggle system theme status
+		DefaultThemeManager.choseSystemTheme(!ThemeManager.useSystemTheme)
+
 		toggleStackStatus(forUsingSystemTheme: useSystemThemeButton.isOn)
+		configureSubviewsColors()
 	}
 	
     // MARK: - Actions
-    // Implement this method only for iOS version less than 13
+	func setSystemThemeStack(){
+		if #available(iOS 13, *) {
+			systemThemeSettingStackView.isHidden = false
+		} else {
+			systemThemeSettingStackView.isHidden = true
+		}
+	}
+	
+	
+	func configureSystemThemeButton(){
+		if #available(iOS 13, *), ThemeManager.useSystemTheme {
+			useSystemThemeButton.isOn = true
+			themeButton.isHidden = true
+		} else {
+			useSystemThemeButton.isOn = false
+			themeButton.isHidden = false
+		}
+	}
+	
+	
     func toggleDarkMode() {
         // Toggle Theme Logic
-        ThemeManager.isDarkModeEnabled = !ThemeManager.isDarkModeEnabled
+		DefaultThemeManager.choseDarkTheme(!ThemeManager.isDarkModeEnabled)
 		NotificationCenter.default.post(name: NSNotification.Name(rawValue: NotificationKeys.themeChangeNotificationName),
                                         object: nil)
     }
