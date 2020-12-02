@@ -28,6 +28,9 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="70"/>
                                         <state key="normal" title="☀️"/>
+                                        <connections>
+                                            <action selector="switchThemeButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VQ4-QT-tiM"/>
+                                        </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="UCP-qd-5aY" userLabel="SystemThemeSettingStack">
                                         <rect key="frame" x="0.0" y="150" width="209.5" height="31"/>
@@ -43,6 +46,9 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="3ge-DE-DjD"/>
                                                 </constraints>
+                                                <connections>
+                                                    <action selector="useSystemThemeToggleValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="NIz-zz-kpa"/>
+                                                </connections>
                                             </switch>
                                         </subviews>
                                     </stackView>
@@ -57,6 +63,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="xsR-ui-qtq"/>
+                    <connections>
+                        <outlet property="systemThemeSettingStackView" destination="UCP-qd-5aY" id="a36-Xp-G6j"/>
+                        <outlet property="themeButton" destination="BSo-z3-QFK" id="DTT-QW-4nk"/>
+                        <outlet property="useSystemThemeButton" destination="k7M-hw-tni" id="TcP-q6-yFc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
