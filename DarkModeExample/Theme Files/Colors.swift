@@ -8,49 +8,40 @@
 
 import UIKit
 
-extension UIColor {
-    @Theme(light: UIColor.white,
-           dark: UIColor.safeSystemBackground)
-    static var background: UIColor
-
-    @Theme(light: UIColor(hex: "333333"),
-           dark: UIColor.safeLabel)
-    static var primaryText: UIColor
-
-    @Theme(light: UIColor(hex: "EEEFF2"),
-           dark: UIColor.safeSeperator)
-    static var seperator: UIColor
-    
-    @Theme(light: UIColor(hex: "1F82FB"),
-           dark: UIColor(hex: "7C7FED"))
-    static var navBar: UIColor
-    
+/// Colors for light mode
+struct LightColors {
+	static let primaryColor = UIColor.black
+	
+	static var backgroundColor: UIColor {
+		// RGB of systemGray4 from the documentation
+		// https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/color/
+		return UIColor.init(red: 209/255, green: 209/255, blue: 214/255, alpha: 1.0)
+	}
+	
 }
 
-// MARK: - BackPort iOS 13 and older Colors
+/// Colors for dark mode
+struct DarkColors {
+	static let primaryColor = UIColor.white
+
+	static var backgroundColor: UIColor {
+		// .systemGray4
+		return UIColor.init(red: 58/255, green: 58/255, blue: 60/255, alpha: 1.0)
+	}
+}
+
 
 extension UIColor {
-    static var safeSystemBackground: UIColor {
-        if #available(iOS 13, *) {
-            return .systemBackground
-        } else {
-            return .black
-        }
-    }
-
-    static var safeLabel: UIColor {
-        if #available(iOS 13, *) {
-            return .label
-        } else {
-            return .white
-        }
-    }
-
-    static var safeSeperator: UIColor {
-        if #available(iOS 13, *) {
-            return .separator
-        } else {
-            return UIColor.gray.withAlphaComponent(0.6)
-        }
-    }
+	@Theme(light: LightColors.backgroundColor,
+		   dark: DarkColors.backgroundColor)
+	static var backgroundColor: UIColor
+	
+	@Theme(light: LightColors.primaryColor,
+		   dark: DarkColors.primaryColor)
+	static var primaryTextColor: UIColor
+	
+	@Theme(light: UIColor.systemPink,
+		   dark: UIColor.systemPink)
+	static var accentColor: UIColor
 }
+

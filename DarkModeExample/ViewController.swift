@@ -10,10 +10,12 @@ import UIKit
 
 class ViewController: UIViewController {
     // MARK: - IBOutlets
-	@IBOutlet weak var themeButton: UIButton!
-	@IBOutlet weak var useSystemThemeButton: UISwitch!
+	@IBOutlet weak var themeButton: AppButton!
+	@IBOutlet weak var useSystemThemeButton: AppSwitch!
 	@IBOutlet weak var systemThemeSettingStackView: UIStackView!
 	
+	@IBOutlet weak var helloWorldLabel: PrimaryLabel!
+	@IBOutlet weak var systemThemeSettingLabel: PrimaryLabel!
 	
 	// MARK: - Life Cycles
 	override func viewDidLoad() {
@@ -39,6 +41,7 @@ class ViewController: UIViewController {
 	}
 	
 	@IBAction func useSystemThemeToggleValueChanged(_ sender: Any) {
+		ThemeManager.useSystemTheme = !ThemeManager.useSystemTheme
 		toggleStackStatus(forUsingSystemTheme: useSystemThemeButton.isOn)
 	}
 	
@@ -47,13 +50,13 @@ class ViewController: UIViewController {
     func toggleDarkMode() {
         // Toggle Theme Logic
         ThemeManager.isDarkModeEnabled = !ThemeManager.isDarkModeEnabled
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "themeChange"),
+		NotificationCenter.default.post(name: NSNotification.Name(rawValue: NotificationKeys.themeChangeNotificationName),
                                         object: nil)
     }
 	
 	func toggleThemeEmoji(forDarkMode isDarkMode: Bool) {
 		if !isDarkMode {
-			themeButton.setTitle("☀️", for: .normal)
+			themeButton.setTitle("🌻", for: .normal)
 		} else {
 			themeButton.setTitle("🌙", for: .normal)
 		}
@@ -74,7 +77,11 @@ class ViewController: UIViewController {
 extension ViewController: ThemeProtocol {
     func configureSubviewsColors() {
 		toggleThemeEmoji(forDarkMode: ThemeManager.isDarkModeEnabled)
-		
+		view.backgroundColor = .backgroundColor
+		themeButton.setupView()
+		useSystemThemeButton.setupView()
+		systemThemeSettingLabel.setupView()
+		helloWorldLabel.setupView()
     }
 }
     

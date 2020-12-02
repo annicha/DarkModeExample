@@ -8,32 +8,13 @@
 
 import UIKit
 
-protocol ThemeProtocol {
-    func addThemeChangeObserver()
-    func configureSubviewsColors()
-}
-
-extension ThemeProtocol  {
-    func addThemeChangeObserver() {
-        if #available(iOS 13, *) {
-        } else {
-            NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "themeChange"),
-                                                   object: nil,
-                                                   queue: OperationQueue.main) { _ in
-                self.configureSubviewsColors()
-            }
-        }
-    }
-
-}
-
 @propertyWrapper
 struct Theme {
     let light: UIColor
     let dark: UIColor
 
     var wrappedValue: UIColor {
-        if #available(iOS 13, *) {
+		if #available(iOS 13, *), ThemeManager.useSystemTheme {
             return UIColor { (traitCollection: UITraitCollection) -> UIColor in
                 if traitCollection.userInterfaceStyle == .dark {
                     return self.dark
@@ -49,4 +30,5 @@ struct Theme {
 
 enum ThemeManager {
     static var isDarkModeEnabled = false
+	static var useSystemTheme = true
 }

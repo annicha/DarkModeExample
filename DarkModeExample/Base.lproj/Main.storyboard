@@ -13,15 +13,21 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController title="HomeViewController" id="BYZ-38-t0r" customClass="ViewController" customModule="DarkModeExample" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC" customClass="PrimaryView" customModule="DarkModeExample" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="rRO-IK-Vp5">
-                                <rect key="frame" x="102.5" y="322.5" width="209.5" height="181"/>
+                                <rect key="frame" x="102.5" y="306" width="209.5" height="214.5"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BSo-z3-QFK">
-                                        <rect key="frame" x="29.5" y="0.0" width="150" height="150"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello World!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2pR-P7-yUJ" userLabel="Hello World!" customClass="PrimaryLabel" customModule="DarkModeExample" customModuleProvider="target">
+                                        <rect key="frame" x="31" y="0.0" width="147.5" height="33.5"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BSo-z3-QFK" customClass="AppButton" customModule="DarkModeExample" customModuleProvider="target">
+                                        <rect key="frame" x="29.5" y="33.5" width="150" height="150"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="150" id="4J8-K8-J0x"/>
                                             <constraint firstAttribute="width" secondItem="BSo-z3-QFK" secondAttribute="height" multiplier="1:1" id="euw-VT-jOq"/>
@@ -33,15 +39,15 @@
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="UCP-qd-5aY" userLabel="SystemThemeSettingStack">
-                                        <rect key="frame" x="0.0" y="150" width="209.5" height="31"/>
+                                        <rect key="frame" x="0.0" y="183.5" width="209.5" height="31"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use system's theme" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iv6-m0-PQ0">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use system's theme" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iv6-m0-PQ0" customClass="PrimaryLabel" customModule="DarkModeExample" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="154.5" height="31"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k7M-hw-tni">
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k7M-hw-tni" customClass="AppSwitch" customModule="DarkModeExample" customModuleProvider="target">
                                                 <rect key="frame" x="159.5" y="0.0" width="52" height="31"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="3ge-DE-DjD"/>
@@ -64,6 +70,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="xsR-ui-qtq"/>
                     <connections>
+                        <outlet property="helloWorldLabel" destination="2pR-P7-yUJ" id="83c-7W-q0H"/>
+                        <outlet property="systemThemeSettingLabel" destination="iv6-m0-PQ0" id="2Ox-SA-Uyf"/>
                         <outlet property="systemThemeSettingStackView" destination="UCP-qd-5aY" id="a36-Xp-G6j"/>
                         <outlet property="themeButton" destination="BSo-z3-QFK" id="DTT-QW-4nk"/>
                         <outlet property="useSystemThemeButton" destination="k7M-hw-tni" id="TcP-q6-yFc"/>
