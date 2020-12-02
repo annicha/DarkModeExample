@@ -6,7 +6,7 @@ Original article on Medium: [Mukyasa's How to Implement Dark Mode with Backward 
 
 This fork allows iOS13+ devices to choose custom theme.
 
-![iPhone11](/img/preview-iPhone11.gif)
+![iPhone11](/img/preview-iPhone11-320px.gif)
 
-![iPhone6](/img/preview-iPhone6.gif)
+![iPhone6](/img/preview-iPhone6-320px.gif)
 
