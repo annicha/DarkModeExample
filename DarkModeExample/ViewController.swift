@@ -9,106 +9,96 @@
 import UIKit
 
 class ViewController: UIViewController {
-    // MARK: - Properties
-
-    fileprivate let reuseIdentifier = "CustomCell"
-    fileprivate let dataSourceArr = ["Hello", "I", "am", "Groot", ":)"]
-
-    lazy var leftBarButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "dark mode"),
-                        for: .normal)
-        button.setImage(UIImage(named: "light mode"),
-                        for: .selected)
-        button.frame = CGRect(x: 0,
-                              y: 0,
-                              width: 35,
-                              height: 35)
-        button.tintColor = UIColor.white
-        button.widthAnchor.constraint(equalToConstant: 35).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 35).isActive = true
-        button.addTarget(self,
-                         action: #selector(toogleDarkMode),
-                         for: .touchUpInside)
-        return button
-    }()
-
     // MARK: - IBOutlets
+	@IBOutlet weak var themeButton: AppButton!
+	@IBOutlet weak var useSystemThemeButton: AppSwitch!
+	@IBOutlet weak var systemThemeSettingStackView: UIStackView!
+	
+	@IBOutlet weak var helloWorldLabel: PrimaryLabel!
+	@IBOutlet weak var systemThemeSettingLabel: PrimaryLabel!
+	
+	// MARK: - Life Cycles
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		setSystemThemeStack()
+		configureSystemThemeButton()
+		
+		// Theme
+		addThemeChangeObserver()
+		configureSubviewsColors()
+	}
 
-    @IBOutlet var tableView: UITableView! {
-        didSet {
-            tableView.dataSource = self
-            tableView.tableFooterView = UIView()
-            tableView.register(UINib(nibName: "CustomCell",
-                                     bundle: nil),
-                               forCellReuseIdentifier: reuseIdentifier)
-        }
-    }
 
-    // MARK: - Life cycle
+	// MARK: - IBActions
+	@IBAction func switchThemeButtonTapped(_ sender: Any) {
+		toggleDarkMode()
+	}
+	
+	@IBAction func useSystemThemeToggleValueChanged(_ sender: Any) {
+		
+		// toggle system theme status
+		DefaultThemeManager.choseSystemTheme(!ThemeManager.useSystemTheme)
 
-    // MARK: - Set up
-
-    // MARK: - IBActions
-
+		toggleStackStatus(forUsingSystemTheme: useSystemThemeButton.isOn)
+		configureSubviewsColors()
+	}
+	
     // MARK: - Actions
-    // Implement this method only for iOS version less than 13
-    @objc func toogleDarkMode() {
+	func setSystemThemeStack(){
+		if #available(iOS 13, *) {
+			systemThemeSettingStackView.isHidden = false
+		} else {
+			systemThemeSettingStackView.isHidden = true
+		}
+	}
+	
+	
+	func configureSystemThemeButton(){
+		if #available(iOS 13, *), ThemeManager.useSystemTheme {
+			useSystemThemeButton.isOn = true
+			themeButton.isHidden = true
+		} else {
+			useSystemThemeButton.isOn = false
+			themeButton.isHidden = false
+		}
+	}
+	
+	
+    func toggleDarkMode() {
         // Toggle Theme Logic
-        leftBarButton.isSelected = !leftBarButton.isSelected
-        ThemeManager.isDarkModeEnabled = !ThemeManager.isDarkModeEnabled
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "themeChange"),
+		DefaultThemeManager.choseDarkTheme(!ThemeManager.isDarkModeEnabled)
+		NotificationCenter.default.post(name: NSNotification.Name(rawValue: NotificationKeys.themeChangeNotificationName),
                                         object: nil)
     }
+	
+	func toggleThemeEmoji(forDarkMode isDarkMode: Bool) {
+		if !isDarkMode {
+			themeButton.setTitle("🌻", for: .normal)
+		} else {
+			themeButton.setTitle("🌙", for: .normal)
+		}
+	}
+	
+	func toggleStackStatus(forUsingSystemTheme useSystemTheme: Bool){
+		if useSystemTheme {
+			themeButton.isHidden = true
+		} else {
+			themeButton.isHidden = false
+		}
+	}
 
-    // MARK: - Navigation
 
-    // MARK: - Network Manager calls
-
-    // MARK: - Extensions
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        navigationController?.navigationBar.isTranslucent = false
-        if #available(iOS 13, *) {
-        } else {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftBarButton)
-        }
-
-        // Theme
-        addThemeChangeObserver()
-        configureSubviewsColors()
-    }
 }
 
-extension ViewController: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView,
-                   numberOfRowsInSection section: Int) -> Int {
-        return dataSourceArr.count
-    }
-
-    func tableView(_ tableView: UITableView,
-                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as? CustomCell else {
-            return UITableViewCell()
-        }
-        cell.backgroundColor = UIColor.background
-        cell.titleLabel.text = dataSourceArr[indexPath.row]
-        cell.titleLabel.textColor = UIColor.primaryText
-        return cell
-    }
-}
 
 extension ViewController: ThemeProtocol {
     func configureSubviewsColors() {
-        tableView.backgroundColor = UIColor.background
-        tableView.reloadData()
-        navigationController?.navigationBar.barTintColor = UIColor.navBar
+		toggleThemeEmoji(forDarkMode: ThemeManager.isDarkModeEnabled)
+		view.backgroundColor = .backgroundColor
+		themeButton.setupView()
+		useSystemThemeButton.setupView()
+		systemThemeSettingLabel.setupView()
+		helloWorldLabel.setupView()
     }
 }
     

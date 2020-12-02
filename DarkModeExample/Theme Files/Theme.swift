@@ -8,23 +8,44 @@
 
 import UIKit
 
-protocol ThemeProtocol {
-    func addThemeChangeObserver()
-    func configureSubviewsColors()
+struct UserDefaultKeys {
+	static let useCustomTheme = "useCustomTheme"
+	static let isDarkSelected = "isDarkSelected"
 }
 
-extension ThemeProtocol  {
-    func addThemeChangeObserver() {
-        if #available(iOS 13, *) {
-        } else {
-            NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "themeChange"),
-                                                   object: nil,
-                                                   queue: OperationQueue.main) { _ in
-                self.configureSubviewsColors()
-            }
-        }
-    }
+class DefaultThemeManager {
+	static func checkDefaultTheme(){
+		let isDarkSelected = UserDefaults.standard.bool(forKey: UserDefaultKeys.isDarkSelected)
 
+		if #available(iOS 13, *){
+			let useCustomTheme = UserDefaults.standard.bool(forKey: UserDefaultKeys.useCustomTheme)
+			
+			ThemeManager.useSystemTheme = !useCustomTheme
+			
+			if useCustomTheme {
+				ThemeManager.isDarkModeEnabled = isDarkSelected
+			}
+		} else {
+			ThemeManager.isDarkModeEnabled = isDarkSelected
+		}
+	}
+	
+
+	static func choseSystemTheme(_ useSystemTheme: Bool){
+		if #available(iOS 13, *) {
+			ThemeManager.useSystemTheme = useSystemTheme
+			UserDefaults.standard.set(!useSystemTheme, forKey: UserDefaultKeys.useCustomTheme)
+			
+			choseDarkTheme(false)
+			return
+		}
+		print("\n🧪 iOS <13 shouldn't be using this function. \(#function) \(#file)")
+	}
+	
+	static func choseDarkTheme(_ isDarkSelected: Bool){
+		ThemeManager.isDarkModeEnabled = isDarkSelected
+		UserDefaults.standard.set(isDarkSelected, forKey: UserDefaultKeys.isDarkSelected)
+	}
 }
 
 @propertyWrapper
@@ -33,7 +54,7 @@ struct Theme {
     let dark: UIColor
 
     var wrappedValue: UIColor {
-        if #available(iOS 13, *) {
+		if #available(iOS 13, *), ThemeManager.useSystemTheme {
             return UIColor { (traitCollection: UITraitCollection) -> UIColor in
                 if traitCollection.userInterfaceStyle == .dark {
                     return self.dark
@@ -49,4 +70,5 @@ struct Theme {
 
 enum ThemeManager {
     static var isDarkModeEnabled = false
+	static var useSystemTheme = true
 }
