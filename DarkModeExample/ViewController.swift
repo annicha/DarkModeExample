@@ -40,7 +40,8 @@ class ViewController: UIViewController {
 		DefaultThemeManager.choseSystemTheme(!ThemeManager.useSystemTheme)
 
 		toggleStackStatus(forUsingSystemTheme: useSystemThemeButton.isOn)
-		configureSubviewsColors()
+		NotificationCenter.default.post(name: NSNotification.Name(rawValue: NotificationKeys.themeChangeNotificationName),
+										object: nil)
 	}
 	
     // MARK: - Actions
